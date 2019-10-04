@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_white"
+    android:orientation="vertical"
+
+    tools:context=".AddStore"
+    tools:ignore="ScrollViewSize,UnusedAttribute,UselessLeaf,UselessParent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Add Store"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/storeImage"
+                android:layout_width="300dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/store_hi"
+                android:background="@android:color/holo_blue_dark"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Click on image to select Store Image."
+                android:gravity="center"
+                tools:ignore="HardcodedText" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Store Name"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/storeName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Store Name"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Address"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Address"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Total Discount in %"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/totalDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Discount"
+                android:inputType="number"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Minimum Purchase Amount in Rs."
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/minPurchaseAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Minimum Amount"
+                android:inputType="number"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Maximum Discount in Rs."
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/maximumDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Maximum Discount"
+                android:inputType="number"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="No. of user avail this offer."
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/luckyUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="No. of user avail this offer"
+                android:inputType="number"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Store Latitude"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/latitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Latitude"
+                android:inputType="numberDecimal"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Store Longitude"
+                tools:ignore="HardcodedText" />
+
+            <EditText
+                android:id="@+id/longitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Longitude"
+                android:inputType="numberDecimal"
+                android:paddingHorizontal="6dp"
+                android:singleLine="true"
+                tools:ignore="Autofill,HardcodedText,TextFields" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Shop Category"
+                tools:ignore="HardcodedText" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_bg"
+                android:text="Submit"
+                android:textColor="@android:color/white"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+
+
