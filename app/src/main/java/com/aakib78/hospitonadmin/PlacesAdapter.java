@@ -213,6 +213,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlacesView
 
                     pdfDocument.finishPage(page);
                     File root = new File(Environment.getExternalStorageDirectory(), "Hospiton-QR");
+                    //File root = new File(Environment.getDataDirectory(), "Hospiton-QR");
                     if (!root.exists()) {
                         root.mkdir();
                     }

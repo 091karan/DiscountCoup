@@ -13,17 +13,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.github.gcacace.signaturepad.views.SignaturePad;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,11 +46,14 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import com.github.gcacace.signaturepad.views.SignaturePad;
 
 public class AddStore extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -70,6 +78,10 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
     private StorageReference storageReference;
     Bitmap bitmap;
     Boolean taskSuccess = false;
+    SignaturePad signaturePad;
+    CheckBox checkBox;
+
+    private Boolean var1 = false, var2 = false, var3 = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +96,11 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
         store = new Store();
+
+        String checkBoxText = "I agree to all the <a href='http://www.redbus.in/mob/mTerms.aspx' > Terms and Conditions</a>";
+
+        checkBox.setText(Html.fromHtml(checkBoxText));
+        checkBox.setMovementMethod(LinkMovementMethod.getInstance());
 
 
         strImage.setOnClickListener(new View.OnClickListener() {
@@ -100,10 +117,7 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
         addStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (uploadImage(UUID.randomUUID())) {
-                    Toast.makeText(AddStore.this, "One Store added.", Toast.LENGTH_SHORT).show();
-                }
+                uploadImage(UUID.randomUUID());
             }
         });
     }
@@ -123,6 +137,8 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
         firebaseDatabase = FirebaseDatabase.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference().child("ImageFolder");
         mReference = firebaseDatabase.getReference("places");
+        signaturePad = (SignaturePad) findViewById(R.id.signaturePad);
+        checkBox  = findViewById(R.id.checkBox);
     }
 
 
@@ -150,7 +166,11 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
         }
     }
 
-    public Boolean uploadImage(final UUID random) {
+    //button click
+    //upload signature to firebase storage -> url
+    //create the Store object , upload to database
+
+    public void uploadImage(final UUID random) {
         if (imageUri != null) {
 
             final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -172,76 +192,124 @@ public class AddStore extends AppCompatActivity implements AdapterView.OnItemSel
             final String ratingValue="0";
             final String totalUsersRated="0";
             final String storeId=mReference.push().getKey();
+            final Bitmap signature =  signaturePad.getTransparentSignatureBitmap();
 
             if (TextUtils.isEmpty(lkyUsr)||TextUtils.isEmpty(storeName) || TextUtils.isEmpty(address) || TextUtils.isEmpty(totalDiscount) || TextUtils.isEmpty(minPurchase) || TextUtils.isEmpty(maxDiscount) || TextUtils.isEmpty(storeLatitude) || TextUtils.isEmpty(storeLongitude) || TextUtils.isEmpty(category)) {
                 Toast.makeText(AddStore.this, "All fields required.", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-                return false;
+                return;
 
             }
             if (!storeLatitude.matches(patternLatitude) || !storeLongitude.matches(patternLongitude)) {
                 Toast.makeText(this, "Invalid latitude/longitude.", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-                return false;
+                return;
 
             }
             if (Integer.parseInt(lckyUser.getText().toString()) <= 0) {
                 Toast.makeText(AddStore.this, "No. of users should greater than zero.", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-                return false;
-            }else {
-                ref.putFile(imageUri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                luckyUser=Integer.parseInt(lckyUser.getText().toString());
-                                store.setStoreName(storeName);
-                                store.setAddress(address);
-                                store.setLckyUser(luckyUser);
-                                store.setTotalDiscount(totalDiscount);
-                                store.setMinPurchase(minPurchase);
-                                store.setMaxDiscount(maxDiscount);
-                                store.setStoreLatitude(storeLatitude);
-                                store.setStoreLongitude(storeLongitude);
-                                store.setCategory(category);
-                                store.setOfferAvailable(offerAvailable);
-                                store.setQrKey(qrKey);
-                                store.setRatingValue(ratingValue);
-                                store.setTotalUserRated(totalUsersRated);
-                                store.setStoreId(storeId);
-                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        String storeImage = String.valueOf(uri);
-                                        store.setStoreImage(storeImage);
-                                        mReference.child(storeId).setValue(store);
-                                        taskSuccess = true;
-                                        progressDialog.dismiss();
-                                        Toast.makeText(AddStore.this, "Upload Successful.", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                progressDialog.dismiss();
-                                taskSuccess = false;
-                                Toast.makeText(AddStore.this, "Upload Failed.", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                                progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                            }
-                        });
-                return taskSuccess;
+                return;
             }
+
+            if (!checkBox.isChecked()){
+                Toast.makeText(this, "Agree to all the terms and conditions", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                return;
+            }
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            signature.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] signatureData = baos.toByteArray();
+
+            UploadTask uploadTask = ref.putBytes(signatureData);
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return ref.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        final String downloadUri = task.getResult().toString();
+
+                        var1 = true;
+                        upload();
+
+
+                    } else {
+                        progressDialog.dismiss();
+                        taskSuccess = false;
+                        Toast.makeText(AddStore.this, "Upload Failed.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            ref.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            var2 = true;
+                            upload();
+                        }
+
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            taskSuccess = false;
+                            Toast.makeText(AddStore.this, "Upload Failed.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+
         }
-        Toast.makeText(this, "Please select image.", Toast.LENGTH_SHORT).show();
-        return taskSuccess;
     }
+
+    private void upload() {
+        if (var1 && var2 && var3) {
+            luckyUser = Integer.parseInt(lckyUser.getText().toString());
+            store.setStoreName(storeName);
+            store.setAddress(address);
+            store.setLckyUser(luckyUser);
+            store.setTotalDiscount(totalDiscount);
+            store.setMinPurchase(minPurchase);
+            store.setMaxDiscount(maxDiscount);
+            store.setStoreLatitude(storeLatitude);
+            store.setStoreLongitude(storeLongitude);
+            store.setCategory(category);
+            store.setOfferAvailable(offerAvailable);
+            store.setQrKey(qrKey);
+            store.setRatingValue(ratingValue);
+            store.setTotalUserRated(totalUsersRated);
+            store.setStoreId(storeId);
+            store.setStoreImage(downloadUri);
+            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    String storeImage = String.valueOf(uri);
+                    store.setStoreImage(storeImage);
+                    mReference.child(storeId).setValue(store);
+                    taskSuccess = true;
+                    progressDialog.dismiss();
+                    Toast.makeText(AddStore.this, "Upload Successful.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
 }

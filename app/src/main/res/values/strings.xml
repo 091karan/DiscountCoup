@@ -16,6 +16,24 @@
         <item>Cosmetics Shops</item>
         <item>Stationary</item>
         <item>Garments</item>
+        <item>Home Appliances</item>
+        <item>Hardware</item>
+        <item>Electronics and Computers</item>
+        <item>Electrical</item>
+        <item>Furnitures and Furnishing House</item>
+        <item>Footware and Bags</item>
+        <item>Jewellery Shops</item>
+        <item>Beauty Parlours</item>
+        <item>Opticals</item>
+        <item>Watch Stores</item>
+        <item>Automobile and Car Accessories</item>
+        <item>Mobile Stores</item>
+        <item>Studio and Priniting</item>
+        <item>Pet House</item>
+        <item>Tent House and others</item>
+        <item>Fruits and Vegetable Shops</item>
+        <item>Travel Agencies</item>
+        <item>Sports Shop</item>
     </string-array>
 </resources>
 

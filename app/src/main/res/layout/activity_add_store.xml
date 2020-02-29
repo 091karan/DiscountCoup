@@ -190,6 +190,17 @@
                 android:layout_height="wrap_content"
                 tools:ignore="HardcodedText" />
 
+            <com.github.gcacace.signaturepad.views.SignaturePad
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/signaturePad"/>
+
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I agree to all the terms and conditions" />
 
             <Button
                 android:id="@+id/submit"
@@ -201,6 +212,8 @@
                 android:text="Submit"
                 android:textColor="@android:color/white"
                 tools:ignore="HardcodedText" />
+
+
 
         </LinearLayout>
     </ScrollView>

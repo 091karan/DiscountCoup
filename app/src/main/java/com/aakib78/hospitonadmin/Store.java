@@ -19,11 +19,13 @@ public class Store {
     private String totalUserRated;
     private String ratingValue;
     private String storeId;
+    private String signature;
+
 
     public Store() {
 
     }
-    public Store(String storeId,String storeName, String address, String totalDiscount, String minPurchase, String maxDiscount, String storeLatitude, String storeLongitude, String category, int lckyUser, String qrKey, String storeImage, Boolean offerAvailable, String totalUserRated, String ratingValue) {
+    public Store(String storeId,String storeName, String address, String totalDiscount, String minPurchase, String maxDiscount, String storeLatitude, String storeLongitude, String category, int lckyUser, String qrKey, String storeImage, Boolean offerAvailable, String totalUserRated, String ratingValue, String signature) {
         this.storeName = storeName;
         this.storeId=storeId;
         this.address = address;
@@ -39,6 +41,7 @@ public class Store {
         this.offerAvailable = offerAvailable;
         this.totalUserRated = totalUserRated;
         this.ratingValue = ratingValue;
+        this.signature = signature;
     }
 
     public String getStoreId() {
@@ -158,5 +161,13 @@ public class Store {
 
     public void setOfferAvailable(Boolean offerAvailable) {
         this.offerAvailable = offerAvailable;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 }
